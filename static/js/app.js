@@ -25,7 +25,7 @@ function init() {
 
         barChart(defaultID);
         bubbleChart(defaultID);
-        //demographicInfo(defaultID);
+        demographicInfo(defaultID);
 
     });
 }
@@ -70,8 +70,6 @@ function barChart(chosenID) {
 
 // Function to create bubble chart
 
-// Function to create bar chart
-
 function bubbleChart(chosenID) {
 
     // Importing data
@@ -105,10 +103,33 @@ function bubbleChart(chosenID) {
     })
 }
 
+// Function to create demographic info display
+
+function demographicInfo(chosenID) {
+
+    // Importing data
+    d3.json(url).then(function(data) {
+        let sampleData = data.metadata;
+
+        // Filtering to narrow down data to chosen ID
+        let selection = sampleData.filter((item) => item.id == chosenID)[0];
+
+        // Selecting the display
+        let display = d3.select("#sample-metadata");
+
+        // Reseting display
+        display.html("");
+
+        // Collecting key-value pairs and entering them into the display
+        Object.entries(selection).forEach(([key, value]) => {display.append("h5").text(`${key}: ${value}`)});
+
+    })
+}
+
 // Function to update graphs and info when a new ID is chosen
 function optionChanged(chosenID) { 
 
     barChart(chosenID);
     bubbleChart(chosenID);
-    //demographicInfo(chosenID);
+    demographicInfo(chosenID);
 };
