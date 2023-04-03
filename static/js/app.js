@@ -24,7 +24,7 @@ function init() {
         let defaultID = options[0];
 
         barChart(defaultID);
-        //bubbleChart(defaultID);
+        bubbleChart(defaultID);
         //demographicInfo(defaultID);
 
     });
@@ -32,7 +32,7 @@ function init() {
 
 init();
 
-// Function to build barchart
+// Function to create bar chart
 
 function barChart(chosenID) {
 
@@ -68,11 +68,47 @@ function barChart(chosenID) {
     })
 }
 
+// Function to create bubble chart
+
+// Function to create bar chart
+
+function bubbleChart(chosenID) {
+
+    // Importing data
+    d3.json(url).then(function(data) {
+        let sampleData = data.samples;
+
+        // Filtering to narrow down data to chosen ID
+        let selection = sampleData.filter((item) => item.id == chosenID)[0];
+
+        // Setting up trace for bubble chart
+        let trace2 = {
+            x: selection.otu_ids,
+            y: selection.sample_values,
+            text: selection.otu_labels,
+            mode: "markers",
+            marker: {
+                size: selection.sample_values,
+                color: selection.otu_ids,
+                colorscale: "Earth"
+            }  
+        }
+
+        let traceData = [trace2];
+
+        let layout2 = {
+            title: "Bacteria Sample Size by OTU ID",
+            xaxis: { title: "OTU ID"}
+        }
+
+        Plotly.newPlot("bubble", traceData, layout2);
+    })
+}
 
 // Function to update graphs and info when a new ID is chosen
 function optionChanged(chosenID) { 
 
     barChart(chosenID);
-    //bubbleChart(chosenID);
+    bubbleChart(chosenID);
     //demographicInfo(chosenID);
 };
